@@ -44,7 +44,7 @@ public class KundenAnkunftEvent extends Event<KundeEntity> {
             
             // Kunden aus Kundenreihe um am Schalter bedient zu werden
             // -> Referenz auf Kunden bereits vorhanden - kein first() n�tig!
-            meinModel.kundenReiheQueue.remove(kunde);
+            meinModel.vermietstation.remove(kunde);
             
             // Bedienungsende Ereignis erzeugen
             BedienEndeEvent bedienEnde = 

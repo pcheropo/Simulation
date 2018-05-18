@@ -7,6 +7,7 @@ import desmoj.core.simulator.*;
 //-> einfache Version, keine speziellen Attribute notwendig
 public class BusEntity extends Entity {
 	final int capacity;
+	int wartezeit;
 
 	// Konstruktor
 	// Par 1: Modellzugehoerigkeit

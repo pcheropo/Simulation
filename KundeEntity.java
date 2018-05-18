@@ -7,25 +7,22 @@ import desmoj.core.simulator.*;
 public class KundeEntity extends Entity {
 	
 	/*
-	 * 0 für Vermietstation
-	 * 1 für Terminal 1
-	 * 2 für Terminal 2
+	 * 0 für Terminal 1
+	 * 1 für Terminal 2
+	 * 2 für Vermietstation und von Terminal 1 abfliegen
+	 * 3 für Vermietstation und von Terminal 2 ablfliegen
 	 */
 	int ankunftplatz;
 	
-	/*
-	 * 0 wenn abfliegen
-	 * 1 wenn ankommen
-	 */
-	int intention;
+	
 
     // Konstruktor
     // Par 1: Modellzugehoerigkeit
     // Par 2: Name der Entitaet
     // Par 3: show inInTrace
-    public KundeEntity(Model owner, String name, boolean showInTrace, int ankunftplatz,int intention) {
+    public KundeEntity(Model owner, String name, boolean showInTrace, int ankunftplatz) {
 	   super(owner, name, showInTrace);
 	   this.ankunftplatz=ankunftplatz;
-	   this.intention=intention;
+	   
     }
 }

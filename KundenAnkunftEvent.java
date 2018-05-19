@@ -1,56 +1,45 @@
 //package schalter1_e;
 
+import java.util.Random;
+
+import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.*;
 
 // stellt das Ereignis einer Kundenankunft dar
 public class KundenAnkunftEvent extends Event<KundeEntity> {
 
-    // nuetzliche Referenz auf entsprechendes Modell
-    private Autovermietung meinModel;
-
-    // Konstruktor
-		// Par 1: Modellzugehoerigkeit
-		// Par 2: Name des Ereignisses
-		// Par 3: show in trace?
-    public KundenAnkunftEvent(Model owner, String name, boolean showInTrace) {
-        super(owner, name, showInTrace);
-
-        meinModel = (Autovermietung) owner;
-
-    }
+    private Autovermittlung meinModel1;
+    private TerminalEntity T1;
+    private TerminalEntity T2;
+    int ziel;
     
-    // Beschreibung der Aktionen, die den Kunden nach dem Eintreffen beim
-    // Schalter betreffen
-    public void eventRoutine(KundeEntity kunde) {
+    public KundenAnkunftEvent(Model owner, String name, boolean showInTrace,int ziel) {
+        super(owner, name, showInTrace);
+        this.ziel = ziel;
 
-        // cast notwendig
-        //KundeEntity kunde =  who;
-
-        // Kunde in Warteschlange
-        meinModel.vermietstation.insert(kunde);
-        sendTraceNote("Laenge der Kundenreihe bei Vermietstation: " + 
-            meinModel.vermietstation.length());
-
-        // Schalter frei?
-        
-        if (!meinModel.freieSchalterQueue.isEmpty()) {
-            // Schalter frei, von entsprechender WS holen
-            SchalterEntity schalter = meinModel.freieSchalterQueue.first();
-            // extra Entfernen von WS notwendig
-            meinModel.freieSchalterQueue.remove(schalter);
-            
-            // Schalter in entsprechende WS um Referenz nicht zu verlieren
-            meinModel.besetzteSchalterQueue.insert(schalter);
-            
-            // Kunden aus Kundenreihe um am Schalter bedient zu werden
-            // -> Referenz auf Kunden bereits vorhanden - kein first() n�tig!
-            meinModel.vermietstation.remove(kunde);
-            
-            // Bedienungsende Ereignis erzeugen
-            BedienEndeEvent bedienEnde = 
-                new BedienEndeEvent (meinModel, "Bedienung Ende", true);
-            // eintragen in Ereignisliste
-            bedienEnde.schedule(kunde, new TimeSpan(meinModel.getBedienZeit()));
-        }
     }
-}
+
+    @Override
+    public void eventRoutine(KundeEntity kunde) throws SuspendExecution {
+        if(!meinModel1.vermietstationQueue.isEmpty()) {
+            Random r = new Random();
+            int ziel = r.nextInt(3) + 2;//random zwische option 2 oder 3 dabei handelt es sich um Terminal1 oder 2
+            BusEntity bus = new BusEntity(meinModel1,"Kunde steigt in den bus ein",true,ziel,meinModel1.vermietstationQueue.first());
+            bus.einsteigen();
+            meinModel1.vermietstationQueue.remove(kunde);
+            
+        }else if(!meinModel1.terminal1Queue.isEmpty()) {
+            int ziel = 4;
+            BusEntity bus = new BusEntity(meinModel1,"Kunde steigt in den bus ein",true,ziel,meinModel1.terminal1Queue.first());
+            bus.einsteigen();
+            meinModel1.terminal1Queue.remove(kunde);
+        }else if(!meinModel1.terminal2Queue.isEmpty()) {
+            int ziel = 4;
+            BusEntity bus = new BusEntity(meinModel1,"Kunde steigt in den bus ein",true,ziel,meinModel1.terminal2Queue.first());
+            bus.einsteigen();
+            meinModel1.terminal2Queue.remove(kunde);
+        }
+       }
+    }
+
+
